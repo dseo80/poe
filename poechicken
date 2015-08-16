@@ -1,0 +1,99 @@
+#SingleInstance FORCE
+
+#IfWinActive, Path of Exile
+menu, tray, add 
+menu, tray, add, Windowed (Borders), Border
+menu, tray, add, Windowed (Borderless), Borderless
+Menu, Tray, Tip, PoE Chicken Script ES v2.0`nMade by Sanctus
+Menu, Tray, Icon, Images\ChickenOff.ico
+;i = bordertop+bottom, j = borderleft+right, l=bordertop, k=borderleft
+toggle = 0
+IniRead, i, borderonoff.ini, border, i
+IniRead, j, borderonoff.ini, border, j
+IniRead, k, borderonoff.ini, border, k
+IniRead, l, borderonoff.ini, border, l
+return
+
+F5::
+WinGetPos,,, w, h, A
+SX := % Round(228 / (1920 / (w - i))) + l
+SY := % Round(989 / (1080 / (h - j))) + k
+CX := % Round(16 / (1920 / (w - i))) + l
+CY := % Round(882 / (1080 / (h - j))) + k
+PixelGetColor, shieldcolor , %SX%, %SY%
+PixelGetColor, shieldcolorrgb , %SX%, %SY%, RGB
+PixelGetColor, chaticon , %CX%, %CY% 
+PixelGetColor, chaticonrgb , %CX%, %CY%, RGB
+OBX := % Round(4 / (1920 / (w - i))) + l
+OBY := % Round(873 / (1080 / (h - j))) + k
+OBXX := % Round(25 / (1920 / (w - i))) + l
+OBYY := % Round(894 / (1080 / (h - j))) + k
+SQX := % Round(168 / (1920 / (w - i))) + l
+SQY := % Round(883 / (1080 / (h - j))) + k
+SQXX := % Round(230 / (1920 / (w - i))) + l
+SQYY := % Round(990 / (1080 / (h - j))) + k
+
+gui, new
+gui, Default
+gui, +LastFound +LabelMyGui
+gui, add, groupbox, w205 h100, Colors found:
+gui, add, text, yp+25 xp+10, ChatIcon Color:
+gui, add, Progress, xp+80 yp-5 w100 h20 c%chaticonrgb%,100
+gui, add, text, yp+25 xp-80, Shield Color:
+gui, add, Progress, xp+80 yp-5 w100 h20 c%shieldcolorrgb%,100
+gui, add, button, xp-80 yp+25 w25 h25 gDone, OK
+gui, show,, Chicken Script Activated
+Menu, Tray, Icon, Images\ChickenOn.ico
+Loop {
+IfWinActive, Path of Exile
+{
+	;Find the Orange chat Icon (makes sure you are on a character)
+	PixelSearch, FoundoX, FoundoY, %OBX%, %OBY%, %OBXX%, %OBYY%, %chaticon%, 10, Fast
+	if ErrorLevel = 0
+	{
+		;If HP goes to 40%~ or below quit
+		PixelSearch, FoundhX, FoundhY, %SQX%, %SQY%, %SQXX%, %SQYY%, %shieldcolor%, 10, Fast
+		if ErrorLevel = 1
+		{
+			SendInput, R
+			
+		}
+	}
+}
+Sleep, 100
+}
+return
+
+Border:
+MsgBox, Windowed (Borders all around)
+;For Windowed (with Borders all round)
+i = 16
+j = 38
+l = 8
+k = 30
+IniWrite, %i%, borderonoff.ini, border, i
+IniWrite, %j%, borderonoff.ini, border, j
+IniWrite, %l%, borderonoff.ini, border, l
+IniWrite, %k%, borderonoff.ini, border, k
+return
+
+Borderless:
+MsgBox, Borderless (No Borders)
+;For Fullscreen Borderless
+i = 0
+j = 0
+l = 0
+k = 0
+IniWrite, %i%, borderonoff.ini, border, i
+IniWrite, %j%, borderonoff.ini, border, j
+IniWrite, %l%, borderonoff.ini, border, l
+IniWrite, %k%, borderonoff.ini, border, k
+return
+
+Done:
+gui,submit,nohide
+gui, destroy
+return
+
+F7::Reload
+F8::ExitApp
