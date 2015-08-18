@@ -1,13 +1,34 @@
-;██████╗ ██╗   ██╗     ██████╗ ██╗   ██╗██████╗ ██╗   ██╗██████╗ 
-;██╔══██╗╚██╗ ██╔╝    ██╔════╝ ██║   ██║██╔══██╗██║   ██║██╔══██╗
-;██████╔╝ ╚████╔╝     ██║  ███╗██║   ██║██████╔╝██║   ██║██║  ██║
-;██╔══██╗  ╚██╔╝      ██║   ██║██║   ██║██╔══██╗██║   ██║██║  ██║
-;██████╔╝   ██║       ╚██████╔╝╚██████╔╝██║  ██║╚██████╔╝██████╔╝
-;╚═════╝    ╚═╝        ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ 
-                                                                
-;-------GUI-----------------GUI-----------------GUI-----------------GUI-----------------GUI----------
 
-#SingleInstance force
+;-------GUI-----------------GUI-----------------GUI-----------------GUI-----------------GUI----------
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+; #Warn  ; Enable warnings to assist with detecting common errors.
+SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+#SingleInstance FORCE
+;Menu, tray, Icon, data\poe-bw.ico
+
+/*
+Run Poe_Helper.exe, , , PoePID1
+Run PoE_Item\POE_ItemInfo.exe, , , PoePID2
+Run PoE_Item\POE_ItemLookup.exe, , , PoePID3
+Run PoE_ck.exe, , , PoePID5
+Run PoE_macros.exe, , , PoePID6
+;Run PoeHud\PoeHUD.exe, C:\Users\Seohyun\Desktop\POE\PoeHud, , PoePID4
+Process, priority, %PoePID1%, High
+
+OnExit, ExitSub
+
+ExitSub:
+;if A_ExitReason not in Logoff,Shutdown  ; Avoid spaces around the comma in this line.
+{
+	Process, close, %PoePID2%
+	Process, close, %PoePID3%
+	Process, close, %PoePID5%
+	Process, close, %PoePID6%
+	;Process, close, %PoePID4%
+}
+ExitApp
+*/
 
 IniRead, LastTab, Config.ini, Config, LastTab, Settings
 
@@ -390,8 +411,6 @@ Gui, Add, Button, x22 y609 w130 h40 gDefault, Reset Profile
 Gui, Add, Button, x182 y609 w120 h40 gReadMe, ReadMe
 Gui, Add, Button, x332 y609 w120 h40 gDonate, Donate
 
-Gui, Add, Text, x380 y1 w110 h18 vguicontroled, Created by Gurud.
-
 Gui, Add, GroupBox, x0 y590 w472 h74 ,
 Gui, Add, GroupBox, x1 y591 w470 h72 ,
 Gui, Add, GroupBox, x2 y592 w468 h70 ,
@@ -492,7 +511,6 @@ StringTrimRight, Name, A_ScriptName, 4
 
 Gui, Show, x760 y198 h665 w474, %Name%
 
-/*
 ;---------------------START DYNAMIC HOTKEYS---------------------
 
 ;"Wild Mode allows hotkeys to trigger when other modIfiers are also held.`nFor example, If you bound Ctrl+C to an action...`nWild Mode ON: Ctrl+Alt+C, Ctrl+ShIft+C etc would still trigger the action`nWild Mode OFF: Ctrl+Alt+C etc would not trigger the action."
@@ -530,10 +548,10 @@ DefaultHKObject := {hk: "", type: "", wild: ""}
 ; Misc vars
 ININame := "Config.ini"
 HotkeyList := []
-NumHotkeys := 9
+NumHotkeys := 16
 
 ; Create the GUI
-Gui 2:Add, Text,, This allows you to change Hotkeys.`n Click the "ReadMe" button to know what the hotkeys do.
+;Gui 2:Add, Text,, This allows you to change Hotkeys.`n Click the "ReadMe" button to know what the hotkeys do.
 Gui, 2:Add, Text, x357 y25 w30 center, Wild`nMode
 
 ypos := 50
@@ -541,12 +559,27 @@ ypos := 50
 ;Gui, 2:Add, Text, x5 y40 w300 center,Hotkey
 ;Gui, 2:Add, Text, x300 y40 center,~ *
 
-Loop % NumHotkeys 
+ArrayCount = 0
+Loop, Read, HotkeyDesc.txt   ; This loop retrieves each line from the file, one at a time.
 {
+    ArrayCount += 1  ; Keep track of how many items are in the array.
+    Array%ArrayCount% := A_LoopReadLine  ; Store this line in the next array element.
+}
+
+Loop % NumHotkeys 
+{  
+ArrayCount = 0
+Loop, Read, HotkeyDesc.txt   ; This loop retrieves each line from the file, one at a time.
+{
+    ArrayCount += 1  ; Keep track of how many items are in the array.
+    Array%ArrayCount% := A_LoopReadLine  ; Store this line in the next array element.
+}
+   element := Array%A_Index%
    Gui, 2:Add, Edit, Disabled vHotkeyName%A_Index% w260 x5 y%ypos%, None
    Gui, 2:Add, Button, gBind vBind%A_Index% yp-1 xp+270, Set Hotkey
    Gui, 2:Add, Checkbox, vWild%A_Index% gOptionChanged xp+90 yp+5
-   ;Gui, 2:Add, Checkbox, vBlock%A_Index% gOptionChanged xp+30 yp
+   Gui, 2:Add, Edit, Disabled vHotkeyDesc%A_Index% w260 xp+50 yp-5, %element%
+   
    ypos += 25
 }
 
@@ -567,7 +600,6 @@ Menu Tray, Standard
 Menu Tray,Check, Configure Hotkeys
 Menu Tray,Check, Configuration Window
 
-*/
 ;---------------------END DYNAMIC HOTKEYS---------------------
 ;---------------------DEBUG WINDOW----------------------------
 
@@ -935,7 +967,7 @@ GetUiBase(hwnd)
    FrameBase:=GetFrameBase(hwnd)
    If (FrameBase="" || FrameBase=0)
       return
-   uiBase:=GetMultilevelPointer(pH,[FrameBase+Offset3,Offset4,0x50])
+   uiBase:=GetMultilevelPointer(pH,[FrameBase+Offset3,Offset4,0x4C])
    return uiBase
 }
 
@@ -996,17 +1028,17 @@ ReadPlayerStats(hwnd, byRef PlayerStats)
    }
    Else If (GlobalS)
    {
-      global Offset1:=0x13c
-      global Offset2:=0x4ac
-      global Offset3:=0x140
+      global Offset1:=0x138
+      global Offset2:=0x5A0
+      global Offset3:=0x13c
       global Offset4:=0x220
-      global Offset5:=0x2fbc
-      global Offset6:=0x15f4
-      global Offset7:=0x15f8
-      global Offset8:=0x108
-      global Offset9:=0xEC
-      global Offset10:=0x134
-      global Offset11:=0x1a8
+      global Offset5:=0x2E80
+      global Offset6:=0x15B8
+      global Offset7:=0x15BC
+      global Offset8:=0x100
+      global Offset9:=0xE4
+      global Offset10:=0x12C
+      global Offset11:=0x198
    }
    Else If (Singapore)
    {
@@ -1031,29 +1063,27 @@ ReadPlayerStats(hwnd, byRef PlayerStats)
    ;PlayerStats.ConfigPath:=ReadMemStr(ph,Config+0xa4,255,"UTF-16")
    PlayerMain:=ReadMemUInt(pH,PlayerBase+4)
    PlayerStatsOffset:=ReadMemUInt(pH,PlayerMain+0xC)
-   PlayerStats.MaxHP:=ReadMemUInt(pH,PlayerStatsOffset+0x30)
-   PlayerStats.CurrHP:=ReadMemUInt(pH,PlayerStatsOffset+0x34)  
-   PlayerStats.ReservedHPFlat:=ReadMemUInt(pH,PlayerStatsOffset+0x3C)
-   PlayerStats.ReservedHPPercent:=ReadMemUInt(pH,PlayerStatsOffset+0x40)
-   PlayerStats.MaxMana:=ReadMemUInt(pH,PlayerStatsOffset+0x54)
-   PlayerStats.ReservedManaFlat:=ReadMemUInt(pH,PlayerStatsOffset+0x60)
-   PlayerStats.ReservedManaPercent:=ReadMemUInt(pH,PlayerStatsOffset+0x64)
-   PlayerStats.CurrMana:=ReadMemUInt(pH,PlayerStatsOffset+0x58)
-   PlayerStats.MaxEShield:=ReadMemUInt(pH,PlayerStatsOffset+0x78)
-   PlayerStats.CurrEShield:=ReadMemUInt(pH,PlayerStatsOffset+0x7C)
+   PlayerStats.MaxHP:=ReadMemUInt(pH,PlayerStatsOffset+0x50)
+   PlayerStats.CurrHP:=ReadMemUInt(pH,PlayerStatsOffset+0x54)  
+   PlayerStats.ReservedHPFlat:=ReadMemUInt(pH,PlayerStatsOffset+0x5C)
+   PlayerStats.ReservedHPPercent:=ReadMemUInt(pH,PlayerStatsOffset+0x60)
+   PlayerStats.MaxMana:=ReadMemUInt(pH,PlayerStatsOffset+0x74)
+   PlayerStats.ReservedManaFlat:=ReadMemUInt(pH,PlayerStatsOffset+0x80)
+   PlayerStats.ReservedManaPercent:=ReadMemUInt(pH,PlayerStatsOffset+0x84)
+   PlayerStats.CurrMana:=ReadMemUInt(pH,PlayerStatsOffset+0x78)
+   PlayerStats.MaxEShield:=ReadMemUInt(pH,PlayerStatsOffset+0x98)
+   PlayerStats.CurrEShield:=ReadMemUInt(pH,PlayerStatsOffset+0x9C)
    PlayerActionIDOffset:=ReadMemUInt(pH,PlayerMain+0x1C)
-   PlayerStats.PlayerActionID:=ReadMemUInt(pH,PlayerActionIDOffset+0x7C)
-   /*
+   PlayerActionID:=ReadMemUInt(pH,PlayerActionIDOffset+0x9C)
    SetFormat, IntegerFast, hex
    PlayerActionID += 0
    PlayerActionID .= ""
    StringRight, PlayerActionID2, PlayerActionID, 2
    SetFormat, IntegerFast, d
    PlayerStats.PlayerActionID:=PlayerActionID2
-   */
 
-   BuffListStart:=ReadMemUInt(pH,PlayerStatsOffset+0x98)
-   BuffListEnd:=ReadMemUInt(pH,PlayerStatsOffset+0x9C)
+   BuffListStart:=ReadMemUInt(pH,PlayerStatsOffset+0xB8)
+   BuffListEnd:=ReadMemUInt(pH,PlayerStatsOffset+0xBC)
    BuffAmount:=((BuffListEnd-BuffListStart)/4)
    PlayerStats.BuffAmount:=((BuffListEnd-BuffListStart)/4)
    Loop, %BuffAmount%
@@ -1071,27 +1101,27 @@ ReadPlayerStats(hwnd, byRef PlayerStats)
 
    CheckBase:=GetMultilevelPointer(pH,[fBase+Offset3,Offset4])
 
-   ChatStatusOffset:=GetMultilevelPointer(pH,[CheckBase+Offset9,0x788,0x0])
-   PlayerStats.ChatStatus:=ReadMemUInt(pH,ChatStatusOffset+0x7e0)
+   ChatStatusOffset:=GetMultilevelPointer(pH,[CheckBase+Offset9,0x808,0x0])
+   PlayerStats.ChatStatus:=ReadMemUInt(pH,ChatStatusOffset+0x860)
 
    PanelInventoryOffset:=ReadMemUInt(pH,CheckBase+Offset8)
-   PlayerStats.PanelInventory:=ReadMemUInt(pH,PanelInventoryOffset+0x7e0)
+   PlayerStats.PanelInventory:=ReadMemUInt(pH,PanelInventoryOffset+0x860)
    PanelSocialOffset:=ReadMemUInt(pH,CheckBase+Offset8+0x10)
-   PlayerStats.PanelSocial:=ReadMemUInt(pH,PanelSocialOffset+0x7e0)
+   PlayerStats.PanelSocial:=ReadMemUInt(pH,PanelSocialOffset+0x860)
    PanelSkillTreeOffset:=ReadMemUInt(pH,CheckBase+Offset8+0x14)
-   PlayerStats.PanelSkillTree:=ReadMemUInt(pH,PanelSkillTreeOffset+0x7e0)
+   PlayerStats.PanelSkillTree:=ReadMemUInt(pH,PanelSkillTreeOffset+0x860)
    PanelWaypointOffset:=ReadMemUInt(pH,CheckBase+Offset8+0x28)
-   PlayerStats.PanelWaypoint:=ReadMemUInt(pH,PanelWaypointOffset+0x7e0)
-   MouseOnEnemyOffset:=ReadMemUInt(pH,CheckBase+Offset8+0xA0)
-   PlayerStats.MouseOnEnemyStatus:=ReadMemUInt(pH,MouseOnEnemyOffset+0x7e0)
-   PanelInstanceManagerOffset:=ReadMemUInt(pH,CheckBase+Offset8+0xB8)  ;added by immor
-   PlayerStats.PanelInstanceManager:=ReadMemUInt(pH,PanelInstanceManagerOffset+0x7e0) ;added by immor
-   InCityOffset:=GetMultilevelPointer(pH,[CheckBase+Offset10,0x708,0x208])
-   PlayerStats.InCity:=ReadMemUInt(pH,InCityOffset+0x7e0)
-   EnemyNamePtr:=GetMultilevelPointer(ph,[CheckBase+Offset11,0x900,0xba0])
+   PlayerStats.PanelWaypoint:=ReadMemUInt(pH,PanelWaypointOffset+0x860)
+   MouseOnEnemyOffset:=ReadMemUInt(pH,CheckBase+Offset8+0x98)
+   PlayerStats.MouseOnEnemyStatus:=ReadMemUInt(pH,MouseOnEnemyOffset+0x860)
+   PanelInstanceManagerOffset:=ReadMemUInt(pH,CheckBase+Offset8+0xB0)  ;added by immor
+   PlayerStats.PanelInstanceManager:=ReadMemUInt(pH,PanelInstanceManagerOffset+0x860) ;added by immor
+   InCityOffset:=GetMultilevelPointer(pH,[CheckBase+Offset10,0x788,0x200])
+   PlayerStats.InCity:=ReadMemUInt(pH,InCityOffset+0x860)
+   EnemyNamePtr:=GetMultilevelPointer(ph,[CheckBase+Offset11,0x978,0xC18])
    EnemyName:=ReadMemStr(ph,EnemyNamePtr,70,"UTF-16")
    PlayerStats.EnemyName:=EnemyName
-   EnemyNamePtr2:=GetMultilevelPointer(ph,[CheckBase+Offset11,0x900,0xb20])
+   EnemyNamePtr2:=GetMultilevelPointer(ph,[CheckBase+Offset11,0x978,0xB98])
    EnemyName2:=ReadMemStr(ph,EnemyNamePtr2+0x32,70,"UTF-16")
    PlayerStats.EnemyName2:=EnemyName2
 
@@ -1109,7 +1139,7 @@ ReadFlasksData(hwnd, byRef FlasksData)
    If (!UiBase) ;not InGame
       return
    
-   FlaskInvBase:=GetMultilevelPointer(pH,[UiBase+0x8f0,0x90c,0x20])
+   FlaskInvBase:=GetMultilevelPointer(pH,[UiBase+0x968,0x984,0x20])
 
    Loop, 5
    {
@@ -1155,11 +1185,11 @@ ReadFlasksData(hwnd, byRef FlasksData)
          FlasksData[A_Index].ChargesCurrent:=ReadMemUInt(pH,FlaskChargesPtr+0xC)
          FlasksData[A_Index].ChargesPerUse:=ReadMemUInt(pH,ReadMemUInt(pH,FlaskChargesPtr+8)+0xC)
 
-         FlaskMod1Ptr:=GetMultilevelPointer(ph,[currFlaskPtr,4,0x1C,4,4,0x10,0x7c,0x14,0x38])
+         FlaskMod1Ptr:=GetMultilevelPointer(ph,[currFlaskPtr,4,0x1C,4,4,0x10,0x60,0x14,0x30])
          FlaskMod1Str:=ReadMemStr(ph,FlaskMod1Ptr,70,"UTF-16")
          FlasksData[A_Index].mod1:=FlaskMod1Str
 
-         FlaskMod2Ptr:=GetMultilevelPointer(ph,[currFlaskPtr,4,0x1C,4,4,0x10,0x7c,0x2c,0x38])
+         FlaskMod2Ptr:=GetMultilevelPointer(ph,[currFlaskPtr,4,0x1C,4,4,0x10,0x60,0x2c,0x30])
          FlaskMod2Str:=ReadMemStr(ph,FlaskMod2Ptr,70,"UTF-16")
          FlasksData[A_Index].mod2:=FlaskMod2Str
 
@@ -1178,31 +1208,31 @@ ReadFlasksData(hwnd, byRef FlasksData)
             FlasksData[A_Index].HPRegAmount:=ReadMemUInt(pH,FlaskLocalstatsPtr+4)
             
             If (InStr(FlasksData[A_Index].mod1,"Bubbling"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod2,"Bubbling"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod1,"起泡的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod2,"起泡的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod1,"Saturated"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/0.67)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/0.67)
             Else If (InStr(FlasksData[A_Index].mod2,"Saturated"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod1,"飽和的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/0.67)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/0.67)
             Else If (InStr(FlasksData[A_Index].mod2,"飽和的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/0.67)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/0.67)
             Else If (InStr(FlasksData[A_Index].mod1,"Catalysed"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else If (InStr(FlasksData[A_Index].mod2,"Catalysed"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else If (InStr(FlasksData[A_Index].mod1,"催化的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else If (InStr(FlasksData[A_Index].mod2,"催化的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else
-            FlasksData[A_Index].EffectDuration:=ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)
+            FlasksData[A_Index].EffectDuration:=ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)
          }
 
          If InStr(FlaskTypeStr, "FlaskMana")
@@ -1210,31 +1240,31 @@ ReadFlasksData(hwnd, byRef FlasksData)
             FlasksData[A_Index].ManaRegAmount:=ReadMemUInt(pH,FlaskLocalstatsPtr+4)
 
             If (InStr(FlasksData[A_Index].mod1,"Bubbling"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod2,"Bubbling"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod1,"起泡的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod2,"起泡的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/2.35)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/2.35)
             Else If (InStr(FlasksData[A_Index].mod1,"Saturated"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/0.67)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/0.67)
             Else If (InStr(FlasksData[A_Index].mod2,"Saturated"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/0.67)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/0.67)
             Else If (InStr(FlasksData[A_Index].mod1,"飽和的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/0.67)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/0.67)
             Else If (InStr(FlasksData[A_Index].mod2,"飽和的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/0.67)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/0.67)
             Else If (InStr(FlasksData[A_Index].mod1,"Catalysed"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else If (InStr(FlasksData[A_Index].mod2,"Catalysed"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else If (InStr(FlasksData[A_Index].mod1,"催化的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else If (InStr(FlasksData[A_Index].mod2,"催化的"))
-            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)/1.5)
+            FlasksData[A_Index].EffectDuration:=(ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)/1.5)
             Else
-            FlasksData[A_Index].EffectDuration:=ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)
+            FlasksData[A_Index].EffectDuration:=ReadMemUInt(pH,FlaskLocalstatsPtr+0xC)
 
          }
          
@@ -1272,7 +1302,7 @@ ReadFlasksData(hwnd, byRef FlasksData)
 
          If InStr(FlaskTypeStr, "FlaskUtility")
          {
-            FlasksData[A_Index].EffectDuration:=ReadMemUInt(pH,FlaskLocalstatsPtr+0x14)
+            FlasksData[A_Index].EffectDuration:=ReadMemUInt(pH,FlaskLocalstatsPtr+0x4)
          }
       }
    }
@@ -1666,88 +1696,24 @@ Main()
   
       If (A_TickCount>=20secsTimer+20000)
       {
-         ;Loop, 5
-         ;{
-            FileRead, ProductionConfig, %ConfigPath%
-            ;FileReadLine, ProductionConfig, %ConfigPath%, 
+         Loop, 5
+         {
+            IniRead, HotkeyFlask%A_Index%, %ConfigPath%, ACTION_KEYS, use_flask_in_slot%A_Index%, %A_Index%
+            vk:=HotkeyFlask%A_Index%
+            SetFormat, IntegerFast, hex
+            vk += 0
+            vk .= ""
+            SetFormat, IntegerFast, d
+            FlaskHotkey%A_Index%={vk%vk%
+         }
 
-            Loop, read, %ConfigPath%
-            {
-                Loop, parse, A_LoopReadLine, %A_Tab%
-                {
-                     testfield = %A_LoopField%
-                     testfield .= ""
-
-                     IfInString, testfield, attack_in_place
-                     {
-                        StringGetPos, StringPos, testfield, =
-                        vk := SubStr(testfield, StringPos+2)
-                        SetFormat, IntegerFast, hex
-                        vk += 0
-                        vk .= ""
-                        SetFormat, IntegerFast, d
-                        AttackInPlaceKey=vk%vk%
-                        continue
-                     }
-                     IfInString, testfield, use_flask_in_slot1
-                     {
-                        StringGetPos, StringPos, testfield, =
-                        vk := SubStr(testfield, StringPos+2)
-                        SetFormat, IntegerFast, hex
-                        vk += 0
-                        vk .= ""
-                        SetFormat, IntegerFast, d
-                        FlaskHotkey1={vk%vk%
-                        continue
-                     }
-                     IfInString, testfield, use_flask_in_slot2
-                     {
-                        StringGetPos, StringPos, testfield, =
-                        vk := SubStr(testfield, StringPos+2)
-                        SetFormat, IntegerFast, hex
-                        vk += 0
-                        vk .= ""
-                        SetFormat, IntegerFast, d
-                        FlaskHotkey2={vk%vk%
-                        continue
-                     }
-                     IfInString, testfield, use_flask_in_slot3
-                     {
-                        StringGetPos, StringPos, testfield, =
-                        vk := SubStr(testfield, StringPos+2)
-                        SetFormat, IntegerFast, hex
-                        vk += 0
-                        vk .= ""
-                        SetFormat, IntegerFast, d
-                        FlaskHotkey3={vk%vk%
-                        continue
-                     }
-                     IfInString, testfield, use_flask_in_slot4
-                     {
-                        StringGetPos, StringPos, testfield, =
-                        vk := SubStr(testfield, StringPos+2)
-                        SetFormat, IntegerFast, hex
-                        vk += 0
-                        vk .= ""
-                        SetFormat, IntegerFast, d
-                        FlaskHotkey4={vk%vk%
-                        continue
-                     }
-                     IfInString, testfield, use_flask_in_slot5
-                     {
-                        StringGetPos, StringPos, testfield, =
-                        vk := SubStr(testfield, StringPos+2)
-                        SetFormat, IntegerFast, hex
-                        vk += 0
-                        vk .= ""
-                        SetFormat, IntegerFast, d
-                        FlaskHotkey5={vk%vk%
-                        continue
-                     }
-                }
-            }
-            ;FlaskHotkey%A_Index%={vk%vk%
-         ;}
+         IniRead, AttackInPlaceKey, %ConfigPath%, ACTION_KEYS, attack_in_place, %A_Index%
+         vk:=AttackInPlaceKey
+         SetFormat, IntegerFast, hex
+         vk += 0
+         vk .= ""
+         SetFormat, IntegerFast, d
+         AttackInPlaceKey=vk%vk%
 
          20secsTimer:=A_TickCount
       }
@@ -2514,7 +2480,7 @@ Main()
       	}
       }
 
-		If (PlayerStats.PlayerActionID!="" && PlayerStats.PlayerActionID!=128 && PlayerStats.PlayerActionID!=90)
+		If (PlayerStats.PlayerActionID!="" && PlayerStats.PlayerActionID!=80 && PlayerStats.PlayerActionID!=90)
 		{
 			MovementTimer:= A_TickCount
 		}
@@ -2528,7 +2494,7 @@ Main()
 				{
 					If (PlayerStats.ChatStatus!="" && PlayerStats.ChatStatus=65536)
 					{
-						If (PlayerStats.PlayerActionID!="" && (PlayerStats.PlayerActionID=128 || PlayerStats.PlayerActionID=90))
+						If (PlayerStats.PlayerActionID!="" && (PlayerStats.PlayerActionID=80 || PlayerStats.PlayerActionID=90))
 						{
 							If (A_TickCount>=MovementTimer+CurrentConfig.QuickSilverTimer)
 							{
@@ -2571,7 +2537,7 @@ Main()
 				{
 					If (PlayerStats.PanelWaypoint=65536 && PlayerStats.PanelInventory=65536 && PlayerStats.PanelSkillTree=65536 && PlayerStats.PanelSocial=65536)
 					{
-						If (PlayerStats.PlayerActionID!="" && (PlayerStats.PlayerActionID=128 || PlayerStats.PlayerActionID=90))
+						If (PlayerStats.PlayerActionID!="" && (PlayerStats.PlayerActionID=80 || PlayerStats.PlayerActionID=90))
 						{
 							If (A_TickCount>=MovementTimer+CurrentConfig.QuickSilverTimer)
 							{
@@ -2927,7 +2893,7 @@ Main()
                         }
                         Else If (TradeStep = 3)
                         {
-                           If (TradeChannel<10)
+                           If (TradeChannel<4)
                            {
                               TradeChannel++
                               TradeStep:= 1
@@ -3072,19 +3038,19 @@ Main()
          CurrEShieldvalue:=PlayerStats.CurrEShield
          GuiControl,4: , CurrEShieldvar , %CurrEShieldvalue%
          PlayerActionIDvalue:=PlayerStats.PlayerActionID
-         If (PlayerActionIDvalue=128 || PlayerActionIDvalue=90)
+         If (PlayerActionIDvalue=80 || PlayerActionIDvalue=90)
          {
             GuiControl,4: , PlayerActionIDvar , %PlayerActionIDvalue% (Moving)
          }
-         Else If (PlayerActionIDvalue=2 || PlayerActionIDvalue=10 || PlayerActionIDvalue=12)
+         Else If (PlayerActionIDvalue=02 || PlayerActionIDvalue=10 || PlayerActionIDvalue=12)
          {
             GuiControl,4: , PlayerActionIDvar , %PlayerActionIDvalue% (Attacking)
          }
-         Else If (PlayerActionIDvalue=0)
+         Else If (PlayerActionIDvalue=00)
          {
             GuiControl,4: , PlayerActionIDvar , %PlayerActionIDvalue% (Nothing)
          }
-         Else If (PlayerActionIDvalue=64)
+         Else If (PlayerActionIDvalue=40)
          {
             GuiControl,4: , PlayerActionIDvar , %PlayerActionIDvalue% (Dead)
          }
@@ -4336,12 +4302,11 @@ DisableSlot:
 return
 
 ReadMe:
-   MsgBox, ------------------------------HOTKEYS------------------------------`n`n[F1] --- Use Resync Command`n[F2] --- Use Remaining Command`n[F3] --- Over an Item for DPSCalc`n[Ctrl+F3] --- Over an Item for More info on the Internet`n[F4] --- Test Exit to Log In Screen`n[Ctrl+F4] -- Test Use Portal`n[F10] -- Send Last Chat Message to Trade Channels 1-10`n[Alt + W] - Change Window to Bordeless, and locks mouse on window.`n[MIDDLE MOUSE] - Send Hideout command.`n`n------------------------------CREDITS------------------------------`n`n Base Script Created by Wrongusername.`n`n GUI and Improvements by Gurud.`n`n DPSCalc By Nipper`n`n----------------------------MORE INFO----------------------------`n`nFor more Info and Updates Go to:`n`n http://www.ownedcore.com/forums`n/mmo/path-of-exile/poe-bots-programs`n/451206-poe-autoflask-autoscript-improvements-updates.html`n`nThe link has been coppied to the clipboard.
-   clipboard = http://www.ownedcore.com/forums/mmo/path-of-exile/poe-bots-programs/451206-poe-autoflask-autoscript-improvements-updates.html
+   MsgBox, ------------------------------INFO------------------------------`n`nUpdated by dseo
 return
 
 Donate:
-   Run "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=gurud.exe@gmail.com&lc=BR&item_name=MultiScript Support&currency_code=USD&bn=PP-DonationsBF:btn_donateCC_LG.gIf:NonHosted"
+   MsgBox, ------------------------------INFO------------------------------`n`nUpdated by dseo
 return
 
 GuiClose:
@@ -4360,40 +4325,127 @@ return
 ; Test that bound hotkeys work
 ;These labels may contain any commands for their respective hotkeys to perform.
 DoHotkey1:
-   desync:=1
+   hideout:=1
 return
 
 DoHotkey2:
-   remaining:=1
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/invite {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+	}
 return
 
 DoHotkey3:
-   DPSCalc()
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/tradewith {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+	}
 return
 
 DoHotkey4:
-   Webgrab()
+   remaining:=1
 return
 
 DoHotkey5:
-   QuitToLoginScreen(WinActive("A"))
+   desync:=1
 return
 
 DoHotkey6:
-   UsePortal()
+   Run, cports.exe /close * * * * PathofExile.exe
 return
 
 DoHotkey7:
-   tradechat:=1
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+   	BlockInput On
+	SendInput ^{Enter}Just a moment - in a map{Enter}
+	BlockInput Off
+	return
+	}
 return
 
 DoHotkey8:
-   WinGet, window, ID, A   ; Use the ID of the active window.
-   Toggle_Window(window)
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+   	BlockInput On
+	SendInput ^{Enter}nty - looking for more/my buyout{Enter}
+	BlockInput Off
+	return
+	}
 return
 
 DoHotkey9:
-   hideout:=1
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+   	BlockInput On
+	SendInput ^{Enter}Hello{Enter}
+	BlockInput Off
+	return
+	}
+return
+
+DoHotkey10:
+  	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+	BlockInput On
+	SendInput {Enter}
+	Sendraw `%
+	SendInput Thanks for Sharing!
+	SendInput {Enter}
+	BlockInput Off
+	return	
+	}
+return
+
+DoHotkey11:
+  	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+	BlockInput On
+	SendInput {Enter}
+	Sendraw `/
+	SendInput "afk Hello and welcome to my shop. I am playing from my phone so I may be slow, thanks for your patience. UNPRICED items I am looking for an offer. If I dont respond, I may be busy or your offer was too low. If I invite you please come to my hideout.Thanks for Looking."
+	SendInput {Enter}
+	BlockInput Off	
+	return
+	}
+return
+
+DoHotkey12:
+ ; 	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+ ;  	{
+	BlockInput On
+	SendInput {Enter}
+	Sendraw `/
+	SendInput trade 1
+	SendInput {Enter}
+	Sleep 50
+	SendInput {Enter}
+	Sendraw `/
+	SendInput global 820
+	SendInput {Enter}
+	BlockInput Off	
+;	return
+;	}
+return
+
+DoHotkey13:
+	tradechat:=1
+return
+
+DoHotkey14:
+return
+
+DoHotkey15:
+return
+
+DoHotkey16:
+Reload
 return
 
 ;-------HOTKEYS-----------------HOTKEYS-----------------HOTKEYS-----------------HOTKEYS--------------
@@ -4674,39 +4726,68 @@ LoadSettings()
       
       If A_index=1
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F1
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^h
       }
       If A_index=2
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F2
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^i
       }
       If A_index=3
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F3
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^t
       }
       If A_index=4
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^F3
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F2
       }
       If A_index=5
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F4
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F3
       }
       If A_index=6
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^F4
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F4
       }
       If A_index=7
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F10
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^1
       }
       If A_index=8
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,!W
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^2
       }
       If A_index=9
       {
-         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,mbutton
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^3
+      }
+	        If A_index=10
+      {
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,!1
+      }
+      If A_index=11
+      {
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^a
+      }
+            
+	      If A_index=12
+      {
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F10
+      }
+      If A_index=13
+      {
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^F10
+      }
+	  If A_index=14
+      {
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,F11
+      }
+	  If A_index=15
+      {
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^F11
+      }
+	  If A_index=16
+      {
+         IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,^F12
       }
       
       ;IniRead, val, %ININame% , Hotkeys, hk_%A_Index%_hk,
@@ -5272,5 +5353,4 @@ If (MouseMoved or ToolTipTimeout >= 50)
 return
 
 ;-------NOT MY FUNCTIONS--------------NOT MY FUNCTIONS--------------NOT MY FUNCTIONS-----------------
-
 ;-------END--------------END--------------END--------------END--------------END----------------------
