@@ -1,34 +1,68 @@
+;Completed
+;integrated all poe_hotkeys
+;integrated pathofmacros
+;integrated chicken
+;removed dps calc from poems
 
-;-------GUI-----------------GUI-----------------GUI-----------------GUI-----------------GUI----------
+
+;STill TODO
+;fix chicken to consider when right click menu opened for chatting
+;tempest update overlay
+;integrate poeitemlookup and poeiteminfo
+
+
+;--------------------STARTUP AND CHECKS-----------------------
+
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
+#SingleInstance FORCE
+;#Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-#SingleInstance FORCE
+FileEncoding , UTF-8
+SetTitleMatchMode, 3
+Process, priority, , High
+
 ;Menu, tray, Icon, data\poe-bw.ico
 
-/*
-Run Poe_Helper.exe, , , PoePID1
-Run PoE_Item\POE_ItemInfo.exe, , , PoePID2
-Run PoE_Item\POE_ItemLookup.exe, , , PoePID3
-Run PoE_ck.exe, , , PoePID5
-Run PoE_macros.exe, , , PoePID6
+
+If (A_AhkVersion <= "1.1.15")
+{
+	msgbox, You need AutoHotkey v1.1.15 or later to run this script. `n`nPlease go to http://ahkscript.org/download and download a recent version.
+	exit
+}
+
+If !A_IsAdmin {
+	Run *RunAs "%A_ScriptFullPath%"
+	ExitApp
+}
+
+IfNotExist, cports.exe
+{
+
+	MsgBox, Autologout/Logout will not Work without cports installed!
+
+}
+
+Run PoE_Item\POE_ItemInfo.exe, , , PoePID1
+Run PoE_Item\POE_ItemLookup.exe, , , PoePID2
+
 ;Run PoeHud\PoeHUD.exe, C:\Users\Seohyun\Desktop\POE\PoeHud, , PoePID4
-Process, priority, %PoePID1%, High
 
 OnExit, ExitSub
 
 ExitSub:
 ;if A_ExitReason not in Logoff,Shutdown  ; Avoid spaces around the comma in this line.
 {
+	Process, close, %PoePID1%
 	Process, close, %PoePID2%
-	Process, close, %PoePID3%
-	Process, close, %PoePID5%
-	Process, close, %PoePID6%
-	;Process, close, %PoePID4%
 }
 ExitApp
-*/
+return
+
+
+
+;-------GUI-----------------GUI-----------------GUI-----------------GUI-----------------GUI----------
+
 
 IniRead, LastTab, Config.ini, Config, LastTab, Settings
 
@@ -733,10 +767,10 @@ cliexesteam=PathOfExileSteam.exe
 cliexe=PathOfExile.exe
 AutoFlaskWatchdogPeriod:=20 ;milliseconds, time to have script recheck Life/mana/flasks availability more often/increase chances of getting saved from death in time, increase this If fps drop.
 lagCompensation:=50
-; Font size for the tooltip, leave empty for default(part of DPSCalc)
-FontSize := 12
-; Create font for later use(part of DPSCalc)
-FixedFont := CreateFont()
+;Font size for the tooltip, leave empty for default(part of DPSCalc)
+;FontSize := 12
+;Create font for later use(part of DPSCalc)
+;FixedFont := CreateFont()
 
 ResyncTimer:= A_TickCount
 RemainingTimer:= A_TickCount
@@ -1390,11 +1424,7 @@ GetClientCoords(byRef mx, byRef my)
 
 QuitToLoginScreen(hwnd)
 {  
-   If (!IsInGame(hwnd))
-   {
-      return
-   }
-   SetGameStateMenu(hwnd)
+    Run, cports.exe /close * * * * PathofExile.exe
 }
 
 GetMaxChargesFlaskOfType(ByRef FlasksData,TypeStr)
@@ -4439,9 +4469,26 @@ DoHotkey13:
 return
 
 DoHotkey14:
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/hideout {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+	}
 return
 
 DoHotkey15:
+  	IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+   	{
+	BlockInput On
+	SendInput {Enter}
+	Sendraw `/
+	SendInput /abandon_daily
+	SendInput {Enter}
+	BlockInput Off	
+	return
+	}
 return
 
 DoHotkey16:
@@ -5100,6 +5147,7 @@ BuildIniName()
 
 ;-------NOT MY FUNCTIONS--------------NOT MY FUNCTIONS--------------NOT MY FUNCTIONS-----------------
  
+ /*
 ; DPS Calculator Script
 ; This script can be found here:
 ; https://www.pathofexile.com/forum/view-thread/594346
@@ -5158,6 +5206,7 @@ ParseDamage(String, DmgType, ByRef DmgLo, ByRef DmgHi)
       }
    }
 }
+
 
 ; Parse clipboard content for item level and dps
 DPSCalc()
@@ -5352,5 +5401,121 @@ If (MouseMoved or ToolTipTimeout >= 50)
 }
 return
 
+*/
+
 ;-------NOT MY FUNCTIONS--------------NOT MY FUNCTIONS--------------NOT MY FUNCTIONS-----------------
+
+;-------CHICKEN SCRIPT------------------------------
+menu, tray, add 
+menu, tray, add, Windowed (Borders), Border
+menu, tray, add, Windowed (Borderless), Borderless
+
+;i = bordertop+bottom, j = borderleft+right, l=bordertop, k=borderleft
+toggle = 0
+IniRead, i, borderonoff.ini, border, i
+IniRead, j, borderonoff.ini, border, j
+IniRead, k, borderonoff.ini, border, k
+IniRead, l, borderonoff.ini, border, l
+return
+
+^F7:: exchicken++
+^F5::
+exchicken = 0
+WinGetPos,,, w, h, A
+SX := % Round(228 / (1920 / (w - i))) + l
+SY := % Round(989 / (1080 / (h - j))) + k
+CX := % Round(16 / (1920 / (w - i))) + l
+CY := % Round(882 / (1080 / (h - j))) + k
+PixelGetColor, shieldcolor , %SX%, %SY%
+PixelGetColor, shieldcolorrgb , %SX%, %SY%, RGB
+PixelGetColor, chaticon , %CX%, %CY% 
+PixelGetColor, chaticonrgb , %CX%, %CY%, RGB
+OBX := % Round(4 / (1920 / (w - i))) + l
+OBY := % Round(873 / (1080 / (h - j))) + k
+OBXX := % Round(25 / (1920 / (w - i))) + l
+OBYY := % Round(894 / (1080 / (h - j))) + k
+SQX := % Round(168 / (1920 / (w - i))) + l
+SQY := % Round(883 / (1080 / (h - j))) + k
+SQXX := % Round(230 / (1920 / (w - i))) + l
+SQYY := % Round(990 / (1080 / (h - j))) + k
+
+gui, new
+gui, Default
+gui, +LastFound +LabelMyGui
+gui, add, groupbox, w205 h100, Colors found:
+gui, add, text, yp+25 xp+10, ChatIcon Color:
+gui, add, Progress, xp+80 yp-5 w100 h20 c%chaticonrgb%,100
+gui, add, text, yp+25 xp-80, Shield Color:
+gui, add, Progress, xp+80 yp-5 w100 h20 c%shieldcolorrgb%,100
+gui, add, button, xp-80 yp+25 w25 h25 gDone, OK
+gui, show,, Chicken Script Activated
+
+Loop {
+IfWinActive Path of Exile ahk_class Direct3DWindowClass
+{
+	;Find the Orange chat Icon (makes sure you are on a character)
+	PixelSearch, FoundoX, FoundoY, %OBX%, %OBY%, %OBXX%, %OBYY%, %chaticon%, 10, Fast
+	if ErrorLevel = 0
+	{
+		;If HP goes to 40%~ or below quit
+		PixelSearch, FoundhX, FoundhY, %SQX%, %SQY%, %SQXX%, %SQYY%, %shieldcolor%, 10, Fast
+		if ErrorLevel = 1
+		{
+			SendInput, R
+			
+		}
+	}
+
+}
+if exchicken
+		Break
+Sleep, 100
+}
+return
+
+Border:
+MsgBox, Windowed (Borders all around)
+;For Windowed (with Borders all round)
+i = 16
+j = 38
+l = 8
+k = 30
+IniWrite, %i%, borderonoff.ini, border, i
+IniWrite, %j%, borderonoff.ini, border, j
+IniWrite, %l%, borderonoff.ini, border, l
+IniWrite, %k%, borderonoff.ini, border, k
+return
+
+Borderless:
+MsgBox, Borderless (No Borders)
+;For Fullscreen Borderless
+i = 0
+j = 0
+l = 0
+k = 0
+IniWrite, %i%, borderonoff.ini, border, i
+IniWrite, %j%, borderonoff.ini, border, j
+IniWrite, %l%, borderonoff.ini, border, l
+IniWrite, %k%, borderonoff.ini, border, k
+return
+
+Done:
+gui,submit,nohide
+gui, destroy
+return
+
+;-----------------------ADDITIONAL MACROS---------------------------------------------
+
+#IfWinActive Path of Exile ahk_class Direct3DWindowClass
+
+^Wheelup::
+	SendInput {Left}
+	return
+	
+
+^Wheeldown::
+	SendInput {Right}
+	return
+	
+	
 ;-------END--------------END--------------END--------------END--------------END----------------------
