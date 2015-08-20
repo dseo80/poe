@@ -5496,16 +5496,21 @@ return
 
 ;-----------------------ADDITIONAL MACROS---------------------------------------------
 
-#IfWinActive Path of Exile ahk_class Direct3DWindowClass
 
 ^Wheelup::
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass
+	{
 	SendInput {Left}
+	}
 	return
 	
 
 ^Wheeldown::
+	IfWinActive, Path of Exile ahk_class Direct3DWindowClass
+	{
 	SendInput {Right}
+	}
 	return
-	
+		
 	
 ;-------END--------------END--------------END--------------END--------------END----------------------
