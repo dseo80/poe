@@ -11,6 +11,6 @@
 11 - SetAFKMode
 12 - Join Trade1 Global820
 13 - Spam Trade Channels 1-4
-14 - Temp
-15 - Temp
+14 - Enter Last Whisperer Hideout
+15 - Abandon Daily Mission
 16 - Reload Script
