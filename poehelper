@@ -43,22 +43,10 @@ IfNotExist, cports.exe
 
 }
 
-Run PoE_Item\POE_ItemInfo.exe, , , PoePID1
-Run PoE_Item\POE_ItemLookup.exe, , , PoePID2
+;Run PoE_Item\POE_ItemInfo.exe, , , PoePID1
+;Run PoE_Item\POE_ItemLookup.exe, , , PoePID2
 
 ;Run PoeHud\PoeHUD.exe, C:\Users\Seohyun\Desktop\POE\PoeHud, , PoePID4
-
-OnExit, ExitSub
-
-ExitSub:
-;if A_ExitReason not in Logoff,Shutdown  ; Avoid spaces around the comma in this line.
-{
-	Process, close, %PoePID1%
-	Process, close, %PoePID2%
-}
-ExitApp
-return
-
 
 
 ;-------GUI-----------------GUI-----------------GUI-----------------GUI-----------------GUI----------
@@ -3846,6 +3834,8 @@ ExitSub:
 If A_ExitReason not in Logoff,Shutdown  ; Avoid spaces around the comma in this line.
 {
     IniWrite, %TabChoice%, Config.ini, Config, LastTab
+	Process, close, %PoePID1%
+	Process, close, %PoePID2%
 }
 ExitApp
 
