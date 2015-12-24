@@ -1,3 +1,30 @@
-Name,Tags,URL,Auto,Sort
-the hunger less than 16c,,http://poe.trade/search/ihamyowayomare,true,price_in_chaos
-test,,http://poe.trade/search/testtesttest,false,price_in_chaos
+Name	Tags	URL	Auto	Sort
+26ChR 50R Unset			TRUE	price_in_chaos
+26ChR 50Dex Unset			TRUE	price_in_chaos
+Unique Greatwolf			TRUE	price_in_chaos
+Hvy Belt 26Chr 80Res			TRUE	price_in_chaos
+Craftable Unsets			TRUE	price_in_chaos
+Gloves 200ES 20ChR			TRUE	price_in_chaos
+Shield 450 ES 30R			TRUE	price_in_chaos
+Jewel MinionD ChR NotLife			TRUE	price_in_chaos
+Jewel MinionD 40R			TRUE	price_in_chaos
+Jewel MinionD 24R ES			TRUE	price_in_chaos
+			FALSE	price_in_chaos
+Shavronnes 6EX	Flip		TRUE	price_in_chaos
+Consuming Dark 25c	Flip		TRUE	price_in_chaos
+Doon 20c	Flip		TRUE	price_in_chaos
+Natural Hierarchy 20c	Flip		TRUE	price_in_chaos
+Hunger 20c	Flip		TRUE	price_in_chaos
+Brittle 30c	Flip		TRUE	price_in_chaos
+Taste of Hate 3.5ex	Flip		TRUE	price_in_chaos
+Lightning Coil 3ex	Flip		TRUE	price_in_chaos
+Belly of the Beast 1ex	Flip		TRUE	price_in_chaos
+Carcass Jack 1ex	Flip		TRUE	price_in_chaos
+Prism Guardian 4c	Flip		TRUE	price_in_chaos
+Mirror of Kalandra	Flip		TRUE	price_in_chaos
+6L armors 2ex				
+6L weapons 2ex				
+Windripper 4ex				
+Mjolnir 1ex				
+Volls Devotion 3ex				
+Kaom Heart 3ex				
