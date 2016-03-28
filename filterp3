@@ -1,0 +1,189 @@
+#------------------------------------------------------------------------
+# Section: 0600 # RARE ITEM HIGHLIGHTING
+#------------------------------------------------------------------------
+
+#----------------------------------------------------
+# 0601 #Classes shown regardless of base (Rings, Amulet, Belt, Jewel, Gloves, Boots, Helmets)
+#----------------------------------------------------
+
+
+Show #$great
+	Class Rings Amulets Belts Jewel
+	Rarity Rare
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetBorderColor 25 180 25
+	SetFontSize 40
+
+Show #$great
+	Class Gloves Boots Helmets
+	Rarity Rare
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+	
+#----------------------------------------------------
+# 0601 #Body Armors only good bases
+#----------------------------------------------------
+
+
+#----------------------------------------------------
+# 0601 #Shields only good bases
+#----------------------------------------------------
+
+
+#----------------------------------------------------
+# 0601 #Weapons (Caster - Dagger, Wands, Sceptres)
+#----------------------------------------------------
+
+Show #$great
+	Class Daggers Wands Sceptres Staves
+	Rarity Rare
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+#----------------------------------------------------
+# 0601 #Weapons (Melee)
+#----------------------------------------------------
+
+Show #$great
+	Class Claws
+	Droplevel >= 60
+	ItemLevel >= 75
+	Rarity Rare
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+#GOOD SWORDS
+#----------------------------------------------------
+
+Show #$good
+	Class "One Hand Swords"
+	Rarity Rare
+	DropLevel >= 60
+	ItemLevel >= 75
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+
+#HIGH ATTACK SPEED LOWER LEVEL BASES
+#These are some of the best ele ST weapons bases.
+
+Show #$good
+	Class "One Hand"
+	BaseType "Jewelled Foil" "Spiraled Foil"
+	Rarity Rare
+	ItemLevel >= 75
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+Show #$good
+	Class "One Hand Axes"
+	BaseType "Siege Axe" "Vaal Hatchet"
+	Rarity Rare
+	ItemLevel >= 75
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+Show #$good
+	Class "One Hand Maces"
+	Rarity Rare
+	DropLevel >= 66
+	ItemLevel >= 75
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+Show #$good, clunky
+	Class "Two Hand"
+	Rarity Rare
+	DropLevel >= 64
+	ItemLevel >= 75
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+	
+#----------------------------------------------------
+# 0601 #Weapons (Bow and Quiver)
+#----------------------------------------------------
+
+Show #$good, clunky
+	Class "Bows"
+	Rarity Rare
+	DropLevel >= 62
+	ItemLevel >= 75
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+	
+Show #$good
+	BaseType "Spike-Point Arrow Quiver" "Broadhead Arrow Quiver" "Two-Point Arrow Quiver"
+	Class "Quivers"
+	Rarity Rare
+	ItemLevel >= 65
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+#----------------------------------------------------
+# 0601 #Shields
+#----------------------------------------------------
+	
+Show #$good, small
+	Class "Shields"
+	Rarity Rare
+	ItemLevel >= 72
+	DropLevel >= 66
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
+Show #$good, autosmall
+	BaseType "Spirit Shield"
+	ItemLevel >= 70
+	Class "Shields"
+	Rarity Rare
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+	
+Show #$good
+	BaseType "Branded Kite Shield" "Champion Kite Shield"
+	Class "Shields"
+	Rarity Rare
+	ItemLevel >= 70
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+	
+Show #$good, autosmall
+	BaseType "Buckler" "Spiked Shield"
+	Class "Shields"
+	Rarity Rare
+	ItemLevel >= 70
+	DropLevel >= 60
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+	
+
+#----------------------------------------------------
+# 0601 #Body Armour
+#----------------------------------------------------
+	
+	
+Show #ok, hybrid
+	BaseType "Vaal Regalia" "Full Dragonscale" "Triumphant Lamellar" "General's Brigandine" "Saintly Chainmail" "Astral Plate" "Glorious Plate" "Zodiac Leather" "Assassin's Garb" "Carnal Armour" "Sadist Garb"
+	Class "Body Armour"
+	Rarity Rare
+	ItemLevel >= 70
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+	
