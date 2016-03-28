@@ -1,0 +1,338 @@
+
+#---------------------------------------------------------------------------------------------------------------
+# Section: ALPHA-a # Talisman league!
+#---------------------------------------------------------------------------------------------------------------
+# !!!FILTER CODE START!!!
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 0 255 150 255
+	SetBackgroundColor 0 75 75 255
+	SetFontSize 42
+	PlayAlertSound 1 300
+	Rarity Unique
+	ItemLevel > 78
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 0 255 150 255
+	SetBackgroundColor 0 75 75 255
+	SetFontSize 40
+	PlayAlertSound 1 300
+	Rarity Rare
+	ItemLevel > 78
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 0 255 150 255
+	SetBackgroundColor 0 75 75 255
+	SetFontSize 38
+	Rarity Magic
+	ItemLevel > 78
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 0 255 150 255
+	SetBackgroundColor 0 75 75 255
+	SetFontSize 36
+	Rarity Normal
+	ItemLevel > 78
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 109 200 130 255
+	SetBackgroundColor 0 0 0 255
+	SetFontSize 42
+	PlayAlertSound 1 300
+	Rarity Unique
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 109 200 130 255
+	SetBackgroundColor 0 0 0 255
+	SetFontSize 40
+	PlayAlertSound 1 300
+	Rarity Rare
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 109 200 130 255
+	SetBackgroundColor 0 0 0 255
+	SetFontSize 38
+	Rarity Magic
+
+Show
+	BaseType "Talisman"
+	SetBorderColor 109 200 130 255
+	SetBackgroundColor 0 0 0 255
+	SetFontSize 36
+	Rarity Normal
+	
+#---------------------------------------------------------------------------------------------------------------
+# Section: 0000 # UTILITY AND JUST-IN-CASE
+#---------------------------------------------------------------------------------------------------------------
+
+Show
+	Class Microtransactions
+
+#------------------------------------------------------------------------
+# Section: 0001 # LABYRINTH MATERIAL
+#------------------------------------------------------------------------	
+	
+Show
+	Class Quest Items
+	SetFontSize 40
+	SetBorderColor 74 230 58
+
+Show
+	BaseType "Silver Key"
+	SetFontSize 40
+	SetBorderColor 74 230 58
+	SetTextColor 74 230 58
+
+Show
+	BaseType "Golden Key"
+	SetFontSize 40
+	SetBorderColor 74 230 58
+	SetTextColor 74 230 58
+
+Show
+	BaseType "Treasure Key"
+	SetFontSize 40
+	SetBorderColor 74 230 58
+	SetTextColor 74 230 58
+
+#------------------------------------------------------------------------
+# Section: 0100 # TOP TIER RARITY
+#------------------------------------------------------------------------
+
+Show
+	Class "Fishing Rod"
+	SetTextColor 255 0 0 255
+	SetBorderColor 255 0 0 255
+	SetBackgroundColor 255 255 255 255
+	SetFontSize 45
+	PlayAlertSound 1 300
+
+#Exception for tabula
+
+Show
+	SocketGroup WWWWWW
+	BaseType "Simple Robe"
+	Rarity Unique
+	PlayAlertSound 1 300
+	SetBackgroundColor 175 96 37 255
+	SetBorderColor 255 150 000 255
+	SetTextColor 0 0 0 255
+	SetFontSize 45
+
+Show
+	LinkedSockets 6
+	SetTextColor 255 0 0
+	SetBorderColor 255 0 0
+	SetBackgroundColor 255 255 255 255
+	SetFontSize 45
+	PlayAlertSound 1 300
+
+Show
+	BaseType "Mirror of Kalandra"
+	SetTextColor 255 0 0 255
+	SetBorderColor 255 0 0 255
+	SetBackgroundColor 255 255 255 255
+	SetFontSize 45
+	PlayAlertSound 1 300
+	
+#------------------------------------------------------------------------
+# Section: 0200 # UNIQUES AND MAPS
+#------------------------------------------------------------------------
+
+#----------------------------------------------------
+# 0201 # UNIQUE TIER LIST
+#----------------------------------------------------
+
+Show # T1 - These uniques are have a consistent price of ~0.5 ex
+	BaseType "Varnished Coat" "Gold Ring" "Penetrating" "Deerskin Gloves" "Sinner Tricorne" "Ursine Pelt" "Champion Kite Shield" "Slaughter Knife" "Large Hybrid Flask" "Sapphire Flask" "Desert Brigandine" "Occultist" "Glorious" "Titanium" "Hubris" "Judgement Staff" "Siege Axe" "Spine Bow" "Prophecy Wand" "Karui Sceptre" "Sacrificial Garb" "Sorcerer Boots" "Paua Ring" "Fiend Dagger" "Topaz Flask"
+	Rarity Unique
+	PlayAlertSound 1 300
+	SetBackgroundColor 255 255 255 255
+	SetBorderColor 175 96 37 255
+	SetTextColor 175 96 37 255
+	SetFontSize 45
+
+Show # T2 - These uniques usually are worth 1+ ex at the start of the league and drop to ~10c over 1-2 month.
+	BaseType "Golden Plate" "Nubuck Boots" "Serpentine Staff" "Vile Staff" "Terror Maul" "Imperial Skean" "Full Wyrmscale" "Gavel" "Archon Kite Shield" "Opal Wand" "Reinforced Greaves" "Vaal Gauntlets" "Imperial Bow" "Conjurer Boots" "Steelscale Gauntlets" "Amethyst Ring" "Diamond Ring" "Crusader Plate" "Ezomyte Burgonet" "Nightmare Bascinet" "Sharkskin Boots" "Two-Stone" "Granite Flask" "Imperial Staff"
+	Rarity Unique
+	PlayAlertSound 1 300
+	SetBackgroundColor 200 96 37 255
+	SetBorderColor 0 0 0 255
+	SetTextColor 0 0 0 255
+	SetFontSize 43
+
+Show
+	Rarity Unique
+	PlayAlertSound 6 300
+	SetBorderColor 175 96 37 254
+	SetTextColor 175 96 37 254
+	SetBackgroundColor 0 0 0 254
+	SetFontSize 39
+	
+	
+#----------------------------------------------------
+# 0202 # MAP TIER LIST
+#----------------------------------------------------
+
+Show # Maps:Unique
+	Class Maps
+	Rarity Unique
+	SetFontSize 40
+	PlayAlertSound 6 300
+
+Show # Maps:T1
+	Class Maps
+	BaseType "Crypt" "Desert" "Dunes" "Dungeon" "Grotto" "Pit Map" "Tropical Island"
+	SetFontSize 34
+#	PlayAlertSound 4 300
+
+Show # Maps:T2
+	Class Maps
+	BaseType "Arcade" "Cemetery" "Channel" "Mountain Ledge" "Sewer" "Thicket" "Wharf"
+	SetFontSize 34
+#	PlayAlertSound 4 300
+
+Show # Maps:T3
+	Class Maps
+	BaseType "Ghetto" "Mud Geyser" "Museum" "Quarry" "Reef" "Spider Lair" "Vaal Pyramid"
+	SetFontSize 34
+#	PlayAlertSound 4 300
+
+Show # Maps:T4
+	Class Maps
+	BaseType "Arena" "Overgrown Shrine" "Promenade" "Shore" "Spider Forest" "Tunnel" "Phantasmagoria"
+	SetFontSize 34
+#	PlayAlertSound 4 300
+
+Show # Maps:T5
+	Class Maps
+	BaseType "Bog Map" "Coves" "Graveyard" "Pier" "Underground Sea" "Villa Map"
+	SetFontSize 34
+#	PlayAlertSound 4 300
+
+Show # Maps:T6
+	Class Maps
+	BaseType "Arachnid" "Catacomb" "Colonnade" "Dry Woods" "Strand" "Temple"
+	SetFontSize 34
+#	PlayAlertSound 4 300
+
+Show # Maps:T7
+	Class Maps
+	BaseType "Jungle Valley" "Terrace" "Torture Chamber" "Waste Pool" "Abandoned Cavern"
+	SetFontSize 40
+	PlayAlertSound 4 300
+#	SetBackgroundColor 100 100 0 255
+#	SetBorderColor 200 200 0 255
+
+Show # Maps:T8
+	Class Maps
+	BaseType "Canyon" "Cells" "Dark Forest" "Dry Peninsula" "Orchard"
+	SetFontSize 40
+	PlayAlertSound 4 300
+#	SetBackgroundColor 100 100 0 255
+#	SetBorderColor 200 200 0 255
+
+Show # Maps:T9
+	Class Maps
+	BaseType "Arid Lake" "Gorge" "Residence" "Underground River" "Malformation"
+	SetFontSize 40
+	PlayAlertSound 4 300
+#	SetBackgroundColor 100 100 0 255
+#	SetBorderColor 200 200 0 255
+
+Show # Maps:T10
+	Class Maps
+	BaseType "Bazaar" "Necropolis" "Plateau" "Volcano" "Chateau"
+	SetFontSize 40
+	PlayAlertSound 4 300
+#	SetBackgroundColor 100 100 0 255
+#	SetBorderColor 200 200 0 255
+
+Show # Maps:T11
+	Class Maps
+	BaseType "Academy" "Crematorium" "Precinct" "Springs"
+	SetFontSize 40
+	PlayAlertSound 4 300
+#	SetBorderColor 0 0 0 255
+#	SetBackgroundColor 255 255 255 255
+
+Show # Maps:T12
+	Class Maps
+	BaseType "Arsenal" "Overgrown Ruin" "Shipyard" "Village Ruin"
+	SetFontSize 45
+	PlayAlertSound 2 300
+	SetTextColor 0 0 0 255
+	SetBackgroundColor 200 200 200 255
+	SetBorderColor 0 0 0 255
+
+Show # Maps:T13
+	Class Maps
+	BaseType "Courtyard" "Excavation" "Wasteland" "Waterways"
+	SetFontSize 45
+	PlayAlertSound 2 300
+	SetTextColor 0 0 0 255
+	SetBackgroundColor 200 200 200 255
+	SetBorderColor 0 0 0 255
+
+Show # Maps:T14
+	Class Maps
+	BaseType "Shrine" "Conservatory" "Palace"
+	SetFontSize 45
+	PlayAlertSound 2 300
+	SetTextColor 0 0 0 255
+	SetBackgroundColor 200 200 200 255
+	SetBorderColor 0 0 0 255
+
+Show # Maps:T15
+	Class Maps
+	BaseType "Abyss" "Colosseum" "Core"
+	SetFontSize 45
+	PlayAlertSound 2 300
+	SetTextColor 0 0 0 255
+	SetBorderColor 0 0 0 255
+	SetBackgroundColor 255 255 255 255
+
+# This shouldn't be happening, but just in case:
+
+Show
+	Class Maps
+	PlayAlertSound 2 300
+	SetFontSize 45
+	
+#----------------------------------------------------
+# 0203 # MAP FRAGMENTS
+#----------------------------------------------------
+
+Show
+	BaseType "Mortal Hope"
+	Class "Map Fragments"
+	PlayAlertSound 2 300
+	SetFontSize 45
+	SetTextColor 0 0 0 255
+	SetBorderColor 0 0 0 255
+	SetBackgroundColor 255 255 255 255
+
+Show
+	BaseType "Sacrifice at Midnight"
+	Class "Map Fragments"
+	PlayAlertSound 4 300
+	SetFontSize 45
+	SetBorderColor 255 255 255 255
+	SetTextColor 255 255 255 255
+	SetBackgroundColor 0 0 0 255
+
+Show
+	Class "Map Fragments"
+	PlayAlertSound 4 300
+	SetFontSize 45
+	SetBorderColor 255 255 255 255
+	SetTextColor 255 255 255 255
+	SetBackgroundColor 0 0 0 255
+	
