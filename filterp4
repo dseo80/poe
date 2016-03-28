@@ -1,0 +1,131 @@
+Hide #Rest of Rares
+	Rarity Rare
+	SetBorderColor 0 0 0
+	SetBackgroundColor 0 0 0 225
+	SetFontSize 30
+	
+	
+#------------------------------------------------------------------------
+# Section: 0700 # NORMAL AND MAGIC ITEM RULES
+#------------------------------------------------------------------------
+
+#------------------------------------------------------------------------
+# 0701 # 83+ ITEM CRAFTING
+#------------------------------------------------------------------------
+Show
+	ItemLevel >= 84
+	BaseType "Vaal Regalia" "Sorcerer Boots" "Sorcerer Gloves" "Hubris Circlet" "Titanium Spirit Shield" "Eternal Burgonet" "Lion Pelt" "Royal Burgonet" 
+	SetBorderColor 255 255 0 255
+	SetFontSize 40
+
+Show
+	ItemLevel >= 84
+	BaseType "Saintly Chainmail" "Titan Gauntlets" "Slink Gloves" "Titan Greaves" "Slink Boots" "Nightmare Bascinet" "Praetor Crown" "Deicide Mask" "Diamond Ring" "Pinnacle Tower Shield" "Vaal Buckler" "Champion Kite Shield" "Supreme Spiked Shield" "Mirrored Spiked Shield"
+	SetBorderColor 255 255 0 255
+	SetFontSize 30
+	
+Show # Endgame: Show normal ilvl 83+ rings/amulets
+	Class Rings Amulet Belts
+	BaseType "Two-Stone" "Diamond" "Prismatic" "Unset"
+	ItemLevel >= 80
+	Rarity Normal
+	SetBorderColor 255 255 0 255
+	SetFontSize 38
+
+Hide #Rest of High ilvl Bases
+	ItemLevel >= 84
+	SetBorderColor 255 255 0 255
+	SetFontSize 38
+	
+#------------------------------------------------------------------------
+# 0705 # MAGIC RINGS, AMULETS, BELTS
+#------------------------------------------------------------------------
+#Once we reach mapping we only want to see the top tiers of magic items
+#We still want to see all rings/amulets/belts. They are small and provide alteration shards, if we need those quickly.
+
+Show # Endgame: Show magic rings, amulets and belts. Reduce font size.
+	Class Rings Amulets Belts
+	BaseType "Unset"
+	Rarity Magic
+	ItemLevel >= 80
+	SetFontSize 30
+
+#------------------------------------------------------------------------
+# 0706 # MAGIC/Normal JEWELS
+#------------------------------------------------------------------------
+
+Show
+	Class Jewel
+	SetFontSize 36
+	SetBackgroundColor 75 75 75
+	SetBorderColor 0 150 200
+	
+
+#------------------------------------------------------------------------
+# Section: 0800 # FLASKS
+#------------------------------------------------------------------------
+
+
+Show #
+	BaseType "Quicksilver Flask" "Silver Flask" "Basalt Flask" "Granite Flask" "Ruby Flask" "Topaz Flask"
+	Quality >= 10
+	SetFontSize 40
+	SetBorderColor 250 250 250
+	SetBackgroundColor 75 75 75
+
+	
+Show #
+	BaseType "Divine Mana Flask"
+	Quality >= 15
+	SetFontSize 40
+	SetBorderColor 250 250 250
+	SetBackgroundColor 75 75 75
+
+
+#------------------------------------------------------------------------
+# 5001 # WARBAND MODS
+#------------------------------------------------------------------------
+
+Hide
+Rarity Magic
+Class "Helmets"
+SetBorderColor 175 30 30
+SetBackgroundColor 200 60 0 175
+SetFontSize 35
+
+Hide
+Rarity Magic
+Class "Gloves"
+SetBorderColor 30 0 175
+SetBackgroundColor 50 25 150 175
+SetFontSize 35
+
+Hide
+Rarity Magic
+Class "Boots"
+SetBorderColor 25 150 90
+SetBackgroundColor 50 125 125 175
+SetFontSize 35
+
+#------------------------------------------------------------------------
+# Section: XXXX # HIDE THE REST THEN FAILSAFE DISPLAY
+#------------------------------------------------------------------------
+#You can replace the "hide" with a "show" below to display all hidden items in a really small font.
+
+Hide # Minimize junk instead of hiding (if "Show")
+Rarity Magic
+SetFontSize 23
+SetBackgroundColor 0 0 0 150
+SetBorderColor 0 0 0 150
+
+Hide # Minimize junk instead of hiding (if "Show")
+Rarity Normal
+SetFontSize 20
+SetBackgroundColor 0 0 0 100
+SetBorderColor 0 0 0 100
+
+# This filter should classify every single item ingame. In case I somehow forgot an item (unlikely after monthes of testing) or something completely new gets added (such as a new rarity like "setitems" or a new itemslot, idk. "wings", this line will ensure, that you'll notice it). Though once again, highly unlikely.
+# Still I doubt it'll ever happen. However, if it will, please inform me!
+Show # SafetyLine!
+SetFontSize 45
+SetBorderColor 255 0 0 255
