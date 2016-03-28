@@ -21,23 +21,13 @@ Show #$great
 	SetTextColor 255 190 0
 	SetBackgroundColor 30 90 45 230
 	SetFontSize 40
-	
-#----------------------------------------------------
-# 0601 #Body Armors only good bases
-#----------------------------------------------------
-
-
-#----------------------------------------------------
-# 0601 #Shields only good bases
-#----------------------------------------------------
-
 
 #----------------------------------------------------
 # 0601 #Weapons (Caster - Dagger, Wands, Sceptres)
 #----------------------------------------------------
 
 Show #$great
-	Class Daggers Wands Sceptres Staves
+	Class Daggers Wands Staves Sceptres
 	Rarity Rare
 	SetTextColor 255 190 0
 	SetBackgroundColor 30 90 45 230
@@ -101,8 +91,8 @@ Show #$good
 
 Show #$good, clunky
 	Class "Two Hand"
+	BaseType "Coronal Maul" "Piledriver" "Exquisite Blade" "Lion Sword" "Reaver Sword" "Vaal Axe" "Fleshripper" "Despot Axe" "Void Axe" "Ezomyte Axe"
 	Rarity Rare
-	DropLevel >= 64
 	ItemLevel >= 75
 	SetTextColor 255 190 0
 	SetBackgroundColor 30 90 45 230
@@ -134,19 +124,27 @@ Show #$good
 #----------------------------------------------------
 # 0601 #Shields
 #----------------------------------------------------
-	
+Hide #$bad, roundshields
+	BaseType "Round Shield"
+	Class "Shields"
+	Rarity Rare
+	ItemLevel >= 70
+	SetTextColor 255 190 0
+	SetBackgroundColor 30 90 45 230
+	SetFontSize 40
+
 Show #$good, small
 	Class "Shields"
 	Rarity Rare
 	ItemLevel >= 72
-	DropLevel >= 66
+	DropLevel >= 65
 	SetTextColor 255 190 0
 	SetBackgroundColor 30 90 45 230
 	SetFontSize 40
 
 Show #$good, autosmall
 	BaseType "Spirit Shield"
-	ItemLevel >= 70
+	ItemLevel >= 65
 	Class "Shields"
 	Rarity Rare
 	SetTextColor 255 190 0
@@ -154,7 +152,7 @@ Show #$good, autosmall
 	SetFontSize 40
 	
 Show #$good
-	BaseType "Branded Kite Shield" "Champion Kite Shield"
+	BaseType "Branded Kite Shield" "Champion Kite Shield" "Sovereign Spiked Shield" "Alder Spiked Shield"
 	Class "Shields"
 	Rarity Rare
 	ItemLevel >= 70
@@ -177,7 +175,6 @@ Show #$good, autosmall
 # 0601 #Body Armour
 #----------------------------------------------------
 	
-	
 Show #ok, hybrid
 	BaseType "Vaal Regalia" "Full Dragonscale" "Triumphant Lamellar" "General's Brigandine" "Saintly Chainmail" "Astral Plate" "Glorious Plate" "Zodiac Leather" "Assassin's Garb" "Carnal Armour" "Sadist Garb"
 	Class "Body Armour"
@@ -186,4 +183,3 @@ Show #ok, hybrid
 	SetTextColor 255 190 0
 	SetBackgroundColor 30 90 45 230
 	SetFontSize 40
-	
