@@ -1,19 +1,2 @@
-1 - Hideout
-2 - Invite Last Whisperer
-3 - Trade with Last Whisperer
-4 - Remaining
-5 - OOS
-6 - Quit to Login
-7 - AutoReply1
-8 - AutoReply2
-9 - AutoReply3
-10 - PartyMsg1
-11 - SetAFKMode
-12 - Join Trade1 Global820
 13 - Spam Trade Channels 1-4
-14 - Enter Last Whisperer Hideout
-15 - Abandon Daily Mission
 16 - Reload Script
-
-
-test
