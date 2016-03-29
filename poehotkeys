@@ -1,0 +1,158 @@
+#SingleInstance force
+#NoTrayIcon
+#EscapeChar \
+
+;Force quit hardcoded here
+
+*F4::Run, cports.exe /close * * * * PathofExile.exe
+
+SetTitleMatchMode 3
+#IfWinActive Path of Exile ahk_class Direct3DWindowClass
+
+{
+
+;====== DONT TOUCH / reading variables from external file ======
+; reader,   variable name, file to read, [section name],  read key
+IniRead, custommessage1, macroconfig.ini, config, Message1
+IniRead, custommessage2, macroconfig.ini, config, Message2
+IniRead, custommessage3, macroconfig.ini, config, Message3
+IniRead, customglobalchannel, macroconfig.ini, config, GlobalChannel
+IniRead, customtradechannel, macroconfig.ini, config, TradeChannel
+
+IniRead, macromessage1, macroconfig.ini, macro, message1
+IniRead, macromessage2, macroconfig.ini, macro, message2
+IniRead, macromessage3, macroconfig.ini, macro, message3
+IniRead, macrohideout, macroconfig.ini, macro, hideout
+IniRead, macroyhideout, macroconfig.ini, macro, yhideout
+IniRead, macroremaining, macroconfig.ini, macro, remaining
+IniRead, macroinvite, macroconfig.ini, macro, invite
+IniRead, macrostarttrade, macroconfig.ini, macro, starttrade
+IniRead, macroaddfriend, macroconfig.ini, macro, addfriend
+IniRead, macrowhois, macroconfig.ini, macro, whois
+IniRead, macrogotochannels, macroconfig.ini, macro, gotochannels
+IniRead, macrotradechannel, macroconfig.ini, macro, tradechannel
+IniRead, macroabandondaily, macroconfig.ini, macro, abandondaily
+
+
+Hotkey, %macromessage1%, executemessage1
+Hotkey, %macromessage2%, executemessage2
+Hotkey, %macromessage3%, executemessage3
+Hotkey, %macroremaining%, executeremaining
+Hotkey, %macrowhois%, executewhois
+Hotkey, %macroinvite%, executeinvite
+Hotkey, %macrostarttrade%, executestarttrade
+Hotkey, %macrohideout%, executehideout
+Hotkey, %macroyhideout%, executeyhideout
+Hotkey, %macroaddfriend%, executeaddfriend
+Hotkey, %macrogotochannels%, executegotochannels
+Hotkey, %macroabandondaily%, executeabandondaily
+
+return
+
+;^ is CTRL button, 
+;! is Left ALT and 
+;+ is Left Shift. 
+
+;==========================================
+;====== ALL REPLY WHISPER MESSAGES START HERE ======	
+;==========================================
+
+;====== WHISPER MESSAGE 1 ======
+executemessage1:
+	BlockInput On
+	SendInput ^{Enter}%custommessage1%{Enter}
+	BlockInput Off
+	return	
+;====== WHISPER MESSAGE 2 ======
+executemessage2:
+	BlockInput On
+	SendInput ^{Enter}%custommessage2%{Enter}
+	BlockInput Off
+	return
+;====== WHISPER MESSAGE 3 ======
+executemessage3:
+	BlockInput On
+	SendInput ^{Enter}%custommessage3%{Enter}
+	BlockInput Off
+	return
+;====== ENTER CHANNELS ======
+gotochannels:
+	BlockInput On
+	SendInput {Enter}/global %customglobalchannel%{Enter}
+	Sleep 250
+	SendInput {Enter}/trade %customtradechannel%{Enter}
+	BlockInput Off
+	return
+	
+;==========================================
+;====== ALL PARTY FUNCTIONS START HERE ======	
+;==========================================	
+
+;====== INVITE WHISPERER ======
+executeinvite:
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/invite {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+;====== TRADE WHISPERER ======
+executestarttrade:
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/tradewith {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+;====== WHOIS WHISPERER ======
+executewhois:
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/whois {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+;====== WHOIS WHISPERER ======
+executeaddfriend:
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/friend {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+	
+;================================================
+;====== ALL NON MESSAGE MACROS START HERE =======	
+;================================================
+	
+	
+;====== GO TO HIDEOUT ======
+executehideout:
+	BlockInput On
+	SendInput {Enter}/hideout{Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+
+;====== GO TO HIS HIDEOUT ======
+executeyhideout:
+	BlockInput On
+	SendInput ^{Enter}{Home}{Delete}/hideout {Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+	
+;====== GET REMAINING MONSTERS ======
+executeremaining:
+	BlockInput On
+	SendInput {Enter}/remaining{Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+	
+;====== ABANDON DAILY MISSON ======
+executeabandondaily:
+	BlockInput On
+	SendInput {Enter}/abandon_daily{Enter}{enter}{up}{up}{escape}
+	BlockInput Off
+	return
+	
+;====== FASTQUIT ======
+;HARDCODED AT TOP
+
+
+;====== CLOSES MACRO PROGRAM ======
+;F12::
+;	ExitApp
+;	return	
+
+}
